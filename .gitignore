@@ -26,8 +26,12 @@ build/
 
 # Generated evaluation outputs
 VUE_STG/output/
-VUE_TR_V2/results/*/
-VUE_TR/results/*/
+# Ignore generated plots in results directories (keep json files as ground truth)
+**/results/*.pdf
+**/results/*.png
+**/results/*.csv
+!**/results/results*.csv
+!**/results/*_ground_truth.json
 
 # Python cache
 __pycache__/
