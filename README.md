@@ -16,6 +16,7 @@ Homepage: https://bytedance.github.io/vidi-website/
 - [Evaluation (VUE-STG)](#evaluation-vue-stg)
 - [Evaluation (VUE-TR-V2)](#evaluation-vue-tr-v2)
 - [Model](#model-and-inference)
+- [Storyline-based Video Creation](#storyline-based-video-creation)
 
 <!-- - [ ] Vidi2 release, tech report and homepage update
 - [ ] New benchmarks release with evaluation code
@@ -42,7 +43,32 @@ Homepage: https://bytedance.github.io/vidi-website/
 4. Wait till the result clips show in the chat box. This could take several minutes for long video.
 
 ## Installation
-Run the [install.sh](install.sh).
+
+### Option 1: Conda Environment (Recommended)
+
+For clean devices, we recommend using Miniconda/Conda for environment setup:
+
+```bash
+# If conda is not installed, the script will install Miniconda automatically
+./setup_conda.sh
+```
+
+Or manually:
+
+```bash
+# Create conda environment
+conda env create -f environment.yml
+
+# Activate environment
+conda activate vidi
+
+# Install flash-attention (optional, requires CUDA)
+pip install flash-attn==2.6.3 --no-build-isolation
+```
+
+### Option 2: Pip Installation
+
+Run the [install.sh](install.sh) for pip-based installation.
 
 
 
@@ -111,6 +137,36 @@ For a given video (e.g., [example_video](https://drive.google.com/file/d/1PZXUmT
 ```
 python3 -u inference.py --video-path [video path] --query [query] --model-path [model path]
 ``` 
+
+## Storyline-based Video Creation
+
+Vidi's temporal retrieval and grounding capabilities can be leveraged for storyline-based video creation (smart video clipping). This feature allows you to:
+
+- **Create highlight reels** from long-form videos
+- **Extract specific storyline segments** based on natural language descriptions
+- **Build narrative-driven clips** by querying for multiple scenes
+
+For detailed technical documentation, see the [Storyline Video Creation Report](docs/STORYLINE_VIDEO_CREATION_REPORT.md).
+
+### Quick Example
+
+```python
+# Example: Extract clips matching a storyline
+from Vidi_7B.model.builder import load_pretrained_model
+
+# Load model
+model, tokenizer, image_processor, audio_processor = load_pretrained_model("path/to/vidi-7b")
+
+# Define storyline segments
+storyline = [
+    "opening scene with introduction",
+    "main action sequence", 
+    "conclusion and closing remarks"
+]
+
+# Query each segment using the temporal retrieval functionality
+# See docs/STORYLINE_VIDEO_CREATION_REPORT.md for complete implementation
+```
 
 ## Citation
 If you find Vidi useful for your research and applications, please cite using this BibTeX:
