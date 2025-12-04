@@ -1,6 +1,7 @@
 #!/bin/bash
 # Vidi Installation Script with Miniconda
 # This script sets up the complete environment for running the Vidi project
+# NOTE: This script is designed for Linux x86_64 systems
 
 set -e
 
@@ -8,12 +9,32 @@ echo "======================================"
 echo "Vidi Project Installation with Conda"
 echo "======================================"
 
+# Detect platform
+PLATFORM=$(uname -s)
+ARCH=$(uname -m)
+
+if [[ "$PLATFORM" != "Linux" ]] || [[ "$ARCH" != "x86_64" ]]; then
+    echo "Warning: This script is optimized for Linux x86_64."
+    echo "Detected: $PLATFORM $ARCH"
+    echo ""
+    if [[ "$PLATFORM" == "Darwin" ]]; then
+        MINICONDA_INSTALLER="Miniconda3-latest-MacOSX-${ARCH}.sh"
+    elif [[ "$PLATFORM" == "Linux" ]] && [[ "$ARCH" == "aarch64" ]]; then
+        MINICONDA_INSTALLER="Miniconda3-latest-Linux-aarch64.sh"
+    else
+        echo "Unsupported platform. Please install Miniconda manually and run:"
+        echo "  conda env create -f environment.yml"
+        exit 1
+    fi
+else
+    MINICONDA_INSTALLER="Miniconda3-latest-Linux-x86_64.sh"
+fi
+
 # Check if conda is available
 if ! command -v conda &> /dev/null; then
     echo "Conda not found. Installing Miniconda..."
     
     # Download and install Miniconda
-    MINICONDA_INSTALLER="Miniconda3-latest-Linux-x86_64.sh"
     wget https://repo.anaconda.com/miniconda/${MINICONDA_INSTALLER} -O /tmp/${MINICONDA_INSTALLER}
     bash /tmp/${MINICONDA_INSTALLER} -b -p $HOME/miniconda3
     rm /tmp/${MINICONDA_INSTALLER}
@@ -32,7 +53,7 @@ cd "$SCRIPT_DIR"
 
 echo ""
 echo "Step 1: Creating conda environment from environment.yml..."
-conda env create -f environment.yml -y || conda env update -f environment.yml
+conda env create -f environment.yml -y 2>/dev/null || conda env update -f environment.yml --prune -y
 
 echo ""
 echo "Step 2: Activating environment..."

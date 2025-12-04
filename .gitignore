@@ -26,10 +26,12 @@ build/
 
 # Generated evaluation outputs
 VUE_STG/output/
-VUE_TR_V2/results/*.png
-VUE_TR_V2/results/*.pdf
-VUE_TR/results/*.png
-VUE_TR/results/*.pdf
+VUE_TR_V2/results/*/
+VUE_TR/results/*/
+
+# Python cache
+__pycache__/
+*.py[cod]
 
 # Model weights (too large for git)
 *.pt
