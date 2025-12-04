@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+.conda/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# Generated evaluation outputs
+VUE_STG/output/
+VUE_TR_V2/results/*.png
+VUE_TR_V2/results/*.pdf
+VUE_TR/results/*.png
+VUE_TR/results/*.pdf
+
+# Model weights (too large for git)
+*.pt
+*.pth
+*.bin
+*.safetensors
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
