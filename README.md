@@ -13,11 +13,69 @@ Homepage: https://bytedance.github.io/vidi-website/
 
 ## Content
 - [Demo](https://vidi.byteintl.com/)
+- [Quick Start (Conda Setup)](#quick-start-conda-setup)
+- [Tech Report: Storyline-based Video Creation](TECH_REPORT.md)
 - [Evaluation (VUE-PLOT)](#evaluation-vue-plot)
 - [Evaluation (VUE-STG)](#evaluation-vue-stg)
 - [Evaluation (VUE-TR-V2)](#evaluation-vue-tr-v2)
 - [Model Inference and Finetune](#model-inference-and-finetune)
 
+
+## Quick Start (Conda Setup)
+
+We provide a unified Miniconda-based setup to run the project on a clean device. Each model component has its own conda `environment.yml` and a single `setup_conda.sh` handles everything.
+
+### Prerequisites
+- Linux (Ubuntu 18.04+)
+- NVIDIA GPU with CUDA 12.1+ drivers (for model inference)
+- Internet connection
+
+### One-Command Setup
+
+```bash
+# Set up all environments (installs Miniconda if needed)
+bash setup_conda.sh all
+
+# Or set up individual components:
+bash setup_conda.sh vidi7b   # Vidi-7B inference environment
+bash setup_conda.sh vidi9b   # Vidi1.5-9B inference/finetune environment
+bash setup_conda.sh eval     # Lightweight evaluation environment
+```
+
+### Manual Conda Setup
+
+```bash
+# For Vidi-7B
+conda env create -f Vidi_7B/environment.yml
+conda activate vidi7b
+pip install "flash-attn==2.6.3" --no-build-isolation
+
+# For Vidi1.5-9B
+conda env create -f Vidi1.5_9B/environment.yml
+conda activate vidi9b
+pip install "flash-attn==2.8.3" --no-build-isolation
+```
+
+### Download Model Weights & Run Inference
+
+```bash
+# Download weights from HuggingFace
+pip install huggingface_hub
+huggingface-cli download bytedance-research/Vidi-7B --local-dir ./models/Vidi-7B
+huggingface-cli download bytedance-research/Vidi1.5-9B --local-dir ./models/Vidi1.5-9B
+
+# Run Vidi-7B inference
+conda activate vidi7b
+cd Vidi_7B
+python3 -u inference.py --video-path <video.mp4> --query "your query" --model-path ../models/Vidi-7B
+
+# Run Vidi1.5-9B inference
+conda activate vidi9b
+cd Vidi1.5_9B
+python3 -u vidi/eval/inference.py --video-path <video.mp4> --query "your query" --model-path ../models/Vidi1.5-9B
+```
+
+> **Note on Storyline-based Video Creation (Vidi-Edit):** The editing plan generation code (Vidi-Edit) is not yet open-sourced but is available via the [web demo](https://vidi.byteintl.com/). See the [Tech Report](TECH_REPORT.md) for a detailed analysis of this capability.
 
 ## Demo
 The demo has been updated at [https://vidi.byteintl.com/](https://vidi.byteintl.com/). The demo has two pages, including vidi base page, and vidi-edit page.
